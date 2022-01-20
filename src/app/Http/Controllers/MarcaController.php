@@ -10,11 +10,11 @@ class MarcaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Marca[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return Marca::all();
     }
 
     /**
@@ -43,11 +43,11 @@ class MarcaController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Marca $marca
-     * @return \Illuminate\Http\Response
+     * @return Marca
      */
     public function show(Marca $marca)
     {
-        //
+        return $marca;
     }
 
     /**
