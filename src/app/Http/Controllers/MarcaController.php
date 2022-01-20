@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Marca;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class MarcaController extends Controller
@@ -10,7 +11,7 @@ class MarcaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Marca[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return Collection|Marca[]
      */
     public function index()
     {
@@ -66,21 +67,23 @@ class MarcaController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Marca $marca
-     * @return \Illuminate\Http\Response
+     * @return Marca
      */
     public function update(Request $request, Marca $marca)
     {
-        //
+        $marca->update($request->all());
+        return $marca;
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Marca $marca
-     * @return \Illuminate\Http\Response
+     * @return string[]
      */
     public function destroy(Marca $marca)
     {
-        //
+        $marca->delete();
+        return ['msg' => 'Marca deletada com sucesso.'];
     }
 }
