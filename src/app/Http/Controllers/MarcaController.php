@@ -31,7 +31,18 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        $marca = Marca::create($request->all());
+        $regras = [
+            'nome' => 'required|unique:marcas',
+            'imagem' => 'required'
+        ];
+        $feedback = [
+            'required' => 'O campo :attribute é obrigatório',
+            'nome.unique' => 'Marca já existe',
+        ];
+
+        $request->validate($regras, $feedback);
+
+        $marca = $this->marca->create($request->all());
         return $marca;
     }
 
@@ -51,8 +62,6 @@ class MarcaController extends Controller
             return $marca;
         }
     }
-
-
 
     /**
      * Update the specified resource in storage.
