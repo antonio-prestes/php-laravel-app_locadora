@@ -9,4 +9,8 @@ class Marca extends Model
 {
     use HasFactory;
     protected $fillable = ['nome', 'imagem'];
+    /**
+     * @var mixed
+     */
+    private $id;
 }
