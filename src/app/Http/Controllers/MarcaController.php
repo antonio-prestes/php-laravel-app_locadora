@@ -24,16 +24,6 @@ class MarcaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -49,42 +39,33 @@ class MarcaController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Marca $marca
-     * @return string[]
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
         $marca = $this->marca->find($id);
 
         if ($marca === null) {
-            return ['erro' => 'Marca não existe'];
+            return response()->json(['erro' => 'Marca não existe'], 404);
         } else {
             return $marca;
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Marca $marca
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Marca $marca)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Marca $marca
-     * @return Marca|string[]
+     * @return Marca|\Illuminate\Http\JsonResponse|string[]
      */
     public function update(Request $request, $id)
     {
         $marca = $this->marca->find($id);
         if ($marca === null) {
-            return ['erro' => 'Atualização não realizada, marca não existe'];
+            return response()->json(['erro' => 'Atualização não realizada, marca não existe'], 404);
         }
         $marca->update($request->all());
         return $marca;
@@ -95,13 +76,13 @@ class MarcaController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Marca $marca
-     * @return string[]
+     * @return \Illuminate\Http\JsonResponse|string[]
      */
     public function destroy($id)
     {
         $marca = $this->marca->find($id);
         if ($marca === null) {
-            return ['erro' => 'Deleção não realizada, marca não existe'];
+            return response()->json(['erro' => 'Deleção não realizada, marca não existe'], 404);
         }
         $marca->delete();
         return ['msg' => 'Marca deletada com sucesso.'];
