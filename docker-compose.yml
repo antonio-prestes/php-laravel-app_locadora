@@ -25,7 +25,7 @@ services:
       - laravel
 
   mysql:
-    image: mariadb:10.6
+    image: mysql:5.7
     container_name: mysql
     restart: unless-stopped
     tty: true
@@ -33,7 +33,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_DATABASE: homestead
-      MYSQL_USER: root
+      MYSQL_USER: user
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
