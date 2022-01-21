@@ -34,7 +34,13 @@ class MarcaController extends Controller
 
         $request->validate($this->marca->rules(), $this->marca->feedback());
 
-        $marca = $this->marca->create($request->all());
+        $imagem = $request->file('imagem');
+        $imagem_urn = $imagem->store('imagens', 'public');
+
+        $marca = $this->marca->create([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        ]);
         return $marca;
     }
 
@@ -68,6 +74,20 @@ class MarcaController extends Controller
         if ($marca === null) {
             return response()->json(['erro' => 'Atualização não realizada, marca não existe'], 404);
         }
+
+        if ($request->method() === "PATCH") {
+            $regrasDinamicas = array();
+
+            foreach ($marca->rules() as $input => $regra) {
+                if (array_key_exists($input, $request->all())) {
+                    $regrasDinamicas[$input] = $regra;
+                }
+            }
+            $request->validate($regrasDinamicas, $marca->feedback());
+        } else {
+            $request->validate($marca->rules(), $marca->feedback());
+        }
+
         $marca->update($request->all());
         return $marca;
 
