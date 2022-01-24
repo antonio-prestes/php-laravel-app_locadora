@@ -89,6 +89,10 @@ class MarcaController extends Controller
             $request->validate($marca->rules(), $marca->feedback());
         }
 
+        if ($request->file('imagem')) {
+            Storage::disk('public')->delete($marca->imagem);
+        }
+
         $imagem = $request->file('imagem');
         $imagem_urn = $imagem->store('imagens', 'public');
 
@@ -110,9 +114,14 @@ class MarcaController extends Controller
     public function destroy($id)
     {
         $marca = $this->marca->find($id);
+
         if ($marca === null) {
             return response()->json(['erro' => 'Deleção não realizada, marca não existe'], 404);
         }
+
+        Storage::disk('public')->delete($marca->imagem);
+
+
         $marca->delete();
         return ['msg' => 'Marca deletada com sucesso.'];
     }
