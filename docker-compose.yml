@@ -15,7 +15,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./src:/var/www/html
     depends_on:
       - php
       - redis
@@ -50,7 +50,7 @@ services:
         - GID=${GID:-1000}
     container_name: php
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./src:/var/www/html
     networks:
       - laravel
 
@@ -103,7 +103,7 @@ services:
         - GID=${GID:-1000}
     container_name: artisan
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./src:/var/www/html
     depends_on:
       - mysql
     working_dir: /var/www/html

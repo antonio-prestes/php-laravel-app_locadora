@@ -1,3 +1,9 @@
 mysql
 .DS_Store
 .idea
+/src/config/
+/src/public/CUserslogcomexPhpstormProjectsphp-laravel-app_locadorasrcstorageframework/
+/src/public/CUserslogcomexPhpstormProjectsphp-laravel-app_locadorasrcstorageframeworkviews/
+/src/public/CUserslogcomexPhpstormProjectsphp-laravel-app_locadorasrcstoragelogs/
+
+/src/public/app/public/imagens/
