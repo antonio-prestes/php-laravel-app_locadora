@@ -17,11 +17,11 @@ class MarcaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Collection|Marca[]
+     * @return Marca[]|Collection|\Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        return Marca::all();
+        return response()->json($this->marca->with('modelos')->get(), 200);
     }
 
     /**
@@ -49,11 +49,11 @@ class MarcaController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Marca $marca
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $marca = $this->marca->find($id);
+        $marca = $this->marca->with('modelos')->find($id);
 
         if ($marca === null) {
             return response()->json(['erro' => 'Marca não existe'], 404);
@@ -96,10 +96,9 @@ class MarcaController extends Controller
         $imagem = $request->file('imagem');
         $imagem_urn = $imagem->store('imagens', 'public');
 
-        $marca->update([
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn
-        ]);
+        $marca->fill($request->all());
+        $marca->imagem = $imagem_urn;
+        $marca->save();
 
         return $marca;
 

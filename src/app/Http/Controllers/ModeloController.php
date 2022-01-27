@@ -16,11 +16,11 @@ class ModeloController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Modelo[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return Modelo[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function index()
     {
-        return Modelo::all();
+        return response()->json($this->modelo->with('marca')->get(), 200);
     }
 
     /**
@@ -59,11 +59,11 @@ class ModeloController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Modelo $modelo
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $modelo = $this->modelo->find($id);
+        $modelo = $this->modelo->with('marca')->find($id);
 
         if ($modelo === null) {
             return response()->json(['erro' => 'Marca não existe'], 404);
@@ -89,7 +89,7 @@ class ModeloController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $modelo= $this->modelo->find($id);
+        $modelo = $this->modelo->find($id);
 
         if ($modelo === null) {
             return response()->json(['erro' => 'Atualização não realizada, modelo não existe'], 404);
@@ -115,16 +115,9 @@ class ModeloController extends Controller
         $imagem = $request->file('imagem');
         $imagem_urn = $imagem->store('imagens/modelos', 'public');
 
-        $modelo->update([
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn,
-            'numero_portas' => $request->numero_portas,
-            'lugares' => $request->lugares,
-            'air_bag' => $request->air_bag,
-            'abs' => $request->abs,
-            'marca_id' => $request->marca_id
-        ]);
-
+        $modelo->fill($request->all());
+        $modelo->imagem = $imagem_urn;
+        $modelo->save();
         return $modelo;
     }
 
