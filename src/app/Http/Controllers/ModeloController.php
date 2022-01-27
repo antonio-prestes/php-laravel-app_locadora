@@ -18,9 +18,19 @@ class ModeloController extends Controller
      *
      * @return Modelo[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json($this->modelo->with('marca')->get(), 200);
+        $modelos = array();
+
+        if ($request->has('atributos')) {
+            $atributos = $request->get('atributos');
+            $modelos = $this->modelo->selectRaw($atributos)->with('marca')->get();
+
+        } else {
+            $modelos = $this->modelo->with('marca')->get();
+        }
+
+        return response()->json($modelos, 200);
     }
 
     /**
