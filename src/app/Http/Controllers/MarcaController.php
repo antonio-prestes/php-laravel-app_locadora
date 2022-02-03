@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Marca;
+use App\Repositories\MarcaRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
-    public function __construct(Marca $marca){
+    public function __construct(Marca $marca)
+    {
         $this->marca = $marca;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,33 +22,24 @@ class MarcaController extends Controller
      */
     public function index(Request $request)
     {
-        $marcas = array();
+        $marcaRepository = new MarcaRepository($this->marca);
 
-        if($request->has('atributos_modelos')) {
-            $atributos_modelos = $request->atributos_modelos;
-            $marcas = $this->marca->with('modelos:id,'.$atributos_modelos);
+        if ($request->has('atributos_modelos')) {
+            $atributos_modelos = 'modelos:id' . $request->atributos_modelos;
+            $marcaRepository->selectAtributosRegistrosRelacionados($atributos_modelos);
         } else {
-            $marcas = $this->marca->with('modelos');
+            $marcaRepository->selectAtributosRegistrosRelacionados('modelos');
         }
 
-        if($request->has('filtro')) {
-            $filtros = explode(';', $request->filtro);
-            foreach($filtros as $key => $condicao) {
-
-                $c = explode(':', $condicao);
-                $marcas = $marcas->where($c[0], $c[1], $c[2]);
-
-            }
+        if ($request->has('filtro')) {
+            $marcaRepository->filtro($request->filtro);
         }
 
-        if($request->has('atributos')) {
-            $atributos = $request->atributos;
-            $marcas = $marcas->selectRaw($atributos)->get();
-        } else {
-            $marcas = $marcas->get();
+        if ($request->has('atributos')) {
+            $marcaRepository->selectAtributos($request->atributos);
         }
 
-        return response()->json($marcas, 200);
+        return response()->json($marcaRepository->getResultados(), 200);
     }
 
     /**
