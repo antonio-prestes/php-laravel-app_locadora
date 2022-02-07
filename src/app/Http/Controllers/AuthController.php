@@ -26,7 +26,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -35,17 +35,19 @@ class AuthController extends Controller
 
     public function me()
     {
-        return 'me';
+        return response()->json(auth()->user());
     }
 
     public function logout()
     {
-        return 'logout';
+        auth('api')->logout();
+        return response()->json('Usuário deslogado.');
     }
 
     public function refresh()
     {
-        return 'refresh';
+        $token = auth('api')->refresh();
+        return response()->json(['token' => $token]);
     }
 
 }
