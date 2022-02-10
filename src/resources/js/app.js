@@ -27,6 +27,7 @@ Vue.component('input-container-component', require('./components/InputContainer'
 Vue.component('table-component', require('./components/Table').default);
 Vue.component('card-component', require('./components/Card').default);
 Vue.component('modal-component', require('./components/Modal').default);
+Vue.component('alert-component', require('./components/Alert').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
