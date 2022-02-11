@@ -5730,18 +5730,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Table"
+  name: " Table",
+  props: ['dados', 'titulos']
 });
 
 /***/ }),
@@ -29427,7 +29418,12 @@ var render = function () {
               "card-component",
               { attrs: { titulo: "Marcas" } },
               [
-                _c("table-component"),
+                _c("table-component", {
+                  attrs: {
+                    dados: _vm.marcas,
+                    titulos: ["id", "nome", "imagem"],
+                  },
+                }),
                 _vm._v(" "),
                 _c(
                   "button",
@@ -29688,60 +29684,64 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("table", { staticClass: "table table-hover" }, [
-        _c("thead", [
-          _c("tr", [
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
-            _vm._v(" "),
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("First")]),
-            _vm._v(" "),
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("Last")]),
-            _vm._v(" "),
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("Handle")]),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("tbody", [
-          _c("tr", [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("1")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Mark")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Otto")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("@mdo")]),
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("2")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Jacob")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Thornton")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("@fat")]),
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("3")]),
-            _vm._v(" "),
-            _c("td", { attrs: { colspan: "2" } }, [_vm._v("Larry the Bird")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("@twitter")]),
-          ]),
-        ]),
+  return _c("div", [
+    _c("table", { staticClass: "table table-hover" }, [
+      _c("thead", [
+        _c(
+          "tr",
+          _vm._l(_vm.titulos, function (titulo, key) {
+            return _c(
+              "th",
+              {
+                key: key,
+                staticClass: "text-uppercase",
+                attrs: { scope: "col" },
+              },
+              [_vm._v(_vm._s(titulo))]
+            )
+          }),
+          0
+        ),
       ]),
-    ])
-  },
-]
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.dados, function (marca) {
+          return _c(
+            "tr",
+            { key: _vm.dados.id },
+            _vm._l(marca, function (valor, chave) {
+              return _vm.titulos.includes(chave)
+                ? _c("td", { key: chave }, [
+                    chave === "imagem"
+                      ? _c("span", [
+                          _c("img", {
+                            attrs: {
+                              src: "/app/public/" + valor,
+                              alt: "imagemlogo",
+                              width: "50px",
+                            },
+                          }),
+                        ])
+                      : _c("span", [
+                          _vm._v(
+                            "\n                      " +
+                              _vm._s(valor) +
+                              "\n                "
+                          ),
+                        ]),
+                  ])
+                : _vm._e()
+            }),
+            0
+          )
+        }),
+        0
+      ),
+    ]),
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
