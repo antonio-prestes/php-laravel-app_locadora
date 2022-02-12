@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+import moment from 'moment';
 
 window.Vue = require('vue').default;
 
@@ -34,6 +35,13 @@ Vue.component('alert-component', require('./components/Alert').default);
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+Vue.filter('formatDate', function (value) {
+    if (value) {
+        return moment(String(value)).format('MM/DD/YYYY hh:mm')
+    }
+});
+
 
 const app = new Vue({
     el: '#app',

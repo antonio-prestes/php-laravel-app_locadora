@@ -26,7 +26,14 @@
                 </card-component>
 
                 <card-component titulo="Marcas">
-                    <table-component :dados="marcas" :titulos="['id', 'nome', 'imagem']"></table-component>
+                    <table-component :dados="marcas"
+                                     :titulos="{
+                                                id: {titulo: 'ID', tipo: 'text'},
+                                                nome: {titulo: 'Nome', tipo: 'text'},
+                                                imagem: {titulo: 'Imagem', tipo: 'img'},
+                                                created_at: {titulo: 'Data de criação', tipo: 'data'},
+                                     }"
+                    ></table-component>
                     <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalMarca">
                         Adicionar
                     </button>
