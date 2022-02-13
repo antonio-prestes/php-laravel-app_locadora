@@ -26,7 +26,7 @@
                 </card-component>
 
                 <card-component titulo="Marcas">
-                    <table-component :dados="marcas"
+                    <table-component :dados="marcas.data"
                                      :titulos="{
                                                 id: {titulo: 'ID', tipo: 'text'},
                                                 nome: {titulo: 'Nome', tipo: 'text'},
@@ -37,7 +37,14 @@
                     <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalMarca">
                         Adicionar
                     </button>
+                    <paginate-component>
+                        <li :class="l.active ? 'page-item active' : 'page-item'" v-for="l, key in marcas.links"
+                            :key="key" @click="paginacao(l)">
+                            <a class="page-link" v-html="l.label"></a>
+                        </li>
+                    </paginate-component>
                 </card-component>
+
 
             </div>
         </div>
@@ -87,11 +94,16 @@ export default {
             logoMarca: [],
             transacaoStatus: '',
             transacaoMessage: {},
-            marcas: []
+            marcas: {data: []}
         }
     },
     methods: {
-
+        paginacao(l) {
+            if (l.url) {
+                this.urlBase = l.url
+                this.carregarLista()
+            }
+        },
         carregarLista() {
             axios.get(this.urlBase)
                 .then(response => {

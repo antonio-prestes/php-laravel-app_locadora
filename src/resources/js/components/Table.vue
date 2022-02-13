@@ -15,6 +15,7 @@
                         <img :src="'/app/public/'+valor" alt="imagemlogo" width="50px"></span>
                 </td>
             </tr>
+
             </tbody>
         </table>
     </div>
@@ -22,7 +23,7 @@
 
 <script>
 export default {
-    name: " Table",
+    name: "Table",
     props: ['dados', 'titulos'],
     computed: {
         dadosFiltrados() {
