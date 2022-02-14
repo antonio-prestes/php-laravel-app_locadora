@@ -4,6 +4,7 @@
             <thead>
             <tr>
                 <th scope="col" v-for="titulo, key in titulos" :key="key">{{ titulo.titulo }}</th>
+                <th v-if="excluir || editar || visualizar"></th>
             </tr>
             </thead>
             <tbody>
@@ -12,10 +13,15 @@
                     <span v-if="titulos[chaveValor].tipo === 'text'">{{ valor }}</span>
                     <span v-if="titulos[chaveValor].tipo === 'data'">{{ valor | formatDate }}</span>
                     <span v-if="titulos[chaveValor].tipo === 'img'">
-                        <img :src="'/app/public/'+valor" alt="imagemlogo" width="50px"></span>
+                        <img :src="'/app/public/'+valor" alt="imagemlogo" width="30px">
+                    </span>
+                </td>
+                <td v-if="excluir || editar || visualizar">
+                    <button v-if="visualizar" class="btn btn-outline-primary btn-sm">Visualizar</button>
+                    <button v-if="editar" class="btn btn-outline-info btn-sm">Editar</button>
+                    <button v-if="excluir" class="btn btn-outline-danger btn-sm float-end">Excluir</button>
                 </td>
             </tr>
-
             </tbody>
         </table>
     </div>
@@ -24,7 +30,7 @@
 <script>
 export default {
     name: "Table",
-    props: ['dados', 'titulos'],
+    props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
     computed: {
         dadosFiltrados() {
             let campos = Object.keys(this.titulos)

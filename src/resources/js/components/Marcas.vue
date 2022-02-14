@@ -28,6 +28,9 @@
 
                 <card-component titulo="Marcas">
                     <table-component :dados="marcas.data"
+                                     :visualizar = true
+                                     :editar = true
+                                     :excluir = true
                                      :titulos="{
                                                 id: {titulo: 'ID', tipo: 'text'},
                                                 nome: {titulo: 'Nome', tipo: 'text'},

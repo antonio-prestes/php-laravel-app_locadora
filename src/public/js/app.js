@@ -5612,6 +5612,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Marcas",
   data: function data() {
@@ -5805,9 +5808,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Table",
-  props: ['dados', 'titulos'],
+  props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
   computed: {
     dadosFiltrados: function dadosFiltrados() {
       var campos = Object.keys(this.titulos);
@@ -51066,6 +51075,9 @@ var render = function () {
                 _c("table-component", {
                   attrs: {
                     dados: _vm.marcas.data,
+                    visualizar: true,
+                    editar: true,
+                    excluir: true,
                     titulos: {
                       id: { titulo: "ID", tipo: "text" },
                       nome: { titulo: "Nome", tipo: "text" },
@@ -51396,12 +51408,16 @@ var render = function () {
       _c("thead", [
         _c(
           "tr",
-          _vm._l(_vm.titulos, function (titulo, key) {
-            return _c("th", { key: key, attrs: { scope: "col" } }, [
-              _vm._v(_vm._s(titulo.titulo)),
-            ])
-          }),
-          0
+          [
+            _vm._l(_vm.titulos, function (titulo, key) {
+              return _c("th", { key: key, attrs: { scope: "col" } }, [
+                _vm._v(_vm._s(titulo.titulo)),
+              ])
+            }),
+            _vm._v(" "),
+            _vm.excluir || _vm.editar || _vm.visualizar ? _c("th") : _vm._e(),
+          ],
+          2
         ),
       ]),
       _vm._v(" "),
@@ -51411,30 +51427,63 @@ var render = function () {
           return _c(
             "tr",
             { key: chave },
-            _vm._l(obj, function (valor, chaveValor) {
-              return _c("td", { key: chaveValor }, [
-                _vm.titulos[chaveValor].tipo === "text"
-                  ? _c("span", [_vm._v(_vm._s(valor))])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.titulos[chaveValor].tipo === "data"
-                  ? _c("span", [_vm._v(_vm._s(_vm._f("formatDate")(valor)))])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.titulos[chaveValor].tipo === "img"
-                  ? _c("span", [
-                      _c("img", {
-                        attrs: {
-                          src: "/app/public/" + valor,
-                          alt: "imagemlogo",
-                          width: "50px",
-                        },
-                      }),
-                    ])
-                  : _vm._e(),
-              ])
-            }),
-            0
+            [
+              _vm._l(obj, function (valor, chaveValor) {
+                return _c("td", { key: chaveValor }, [
+                  _vm.titulos[chaveValor].tipo === "text"
+                    ? _c("span", [_vm._v(_vm._s(valor))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.titulos[chaveValor].tipo === "data"
+                    ? _c("span", [_vm._v(_vm._s(_vm._f("formatDate")(valor)))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.titulos[chaveValor].tipo === "img"
+                    ? _c("span", [
+                        _c("img", {
+                          attrs: {
+                            src: "/app/public/" + valor,
+                            alt: "imagemlogo",
+                            width: "30px",
+                          },
+                        }),
+                      ])
+                    : _vm._e(),
+                ])
+              }),
+              _vm._v(" "),
+              _vm.excluir || _vm.editar || _vm.visualizar
+                ? _c("td", [
+                    _vm.visualizar
+                      ? _c(
+                          "button",
+                          { staticClass: "btn btn-outline-primary btn-sm" },
+                          [_vm._v("Visualizar")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editar
+                      ? _c(
+                          "button",
+                          { staticClass: "btn btn-outline-info btn-sm" },
+                          [_vm._v("Editar")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.excluir
+                      ? _c(
+                          "button",
+                          {
+                            staticClass:
+                              "btn btn-outline-danger btn-sm float-end",
+                          },
+                          [_vm._v("Excluir")]
+                        )
+                      : _vm._e(),
+                  ])
+                : _vm._e(),
+            ],
+            2
           )
         }),
         0
