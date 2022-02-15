@@ -2,7 +2,6 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                {{$store.state.teste}}
                 <card-component titulo="buscar marcas">
                     <div class="row">
                         <div class="col-3">

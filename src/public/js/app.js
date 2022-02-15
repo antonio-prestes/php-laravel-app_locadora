@@ -5621,7 +5621,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Marcas",
   data: function data() {
@@ -5825,6 +5824,9 @@ __webpack_require__.r(__webpack_exports__);
   name: "Table",
   props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
   computed: {
+    setStore: function setStore(obj) {
+      console.log(obj);
+    },
     dadosFiltrados: function dadosFiltrados() {
       var campos = Object.keys(this.titulos);
       var dadosFiltrados = [];
@@ -50969,11 +50971,6 @@ var render = function () {
           "div",
           { staticClass: "col-md-8" },
           [
-            _vm._v(
-              "\n            " +
-                _vm._s(_vm.$store.state.teste) +
-                "\n            "
-            ),
             _c("card-component", { attrs: { titulo: "buscar marcas" } }, [
               _c("div", { staticClass: "row" }, [
                 _c(
@@ -51524,6 +51521,11 @@ var render = function () {
                             attrs: {
                               "data-bs-toggle": _vm.visualizar.dataToggle,
                               "data-bs-target": _vm.visualizar.dataTarget,
+                            },
+                            on: {
+                              click: function ($event) {
+                                return _vm.setStore(obj)
+                              },
                             },
                           },
                           [_vm._v("Visualizar")]
