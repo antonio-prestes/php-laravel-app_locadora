@@ -4,7 +4,7 @@
             <thead>
             <tr>
                 <th scope="col" v-for="titulo, key in titulos" :key="key">{{ titulo.titulo }}</th>
-                <th v-if="excluir || editar || visualizar"></th>
+                <th v-if="excluir || editar || visualizar.visivel"></th>
             </tr>
             </thead>
             <tbody>
@@ -17,7 +17,7 @@
                     </span>
                 </td>
                 <td v-if="excluir || editar || visualizar">
-                    <button v-if="visualizar" class="btn btn-outline-primary btn-sm">Visualizar</button>
+                    <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget">Visualizar</button>
                     <button v-if="editar" class="btn btn-outline-info btn-sm">Editar</button>
                     <button v-if="excluir" class="btn btn-outline-danger btn-sm float-end">Excluir</button>
                 </td>

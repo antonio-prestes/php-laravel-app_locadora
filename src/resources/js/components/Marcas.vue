@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-
+                {{$store.state.teste}}
                 <card-component titulo="buscar marcas">
                     <div class="row">
                         <div class="col-3">
@@ -28,9 +28,9 @@
 
                 <card-component titulo="Marcas">
                     <table-component :dados="marcas.data"
-                                     :visualizar = true
-                                     :editar = true
-                                     :excluir = true
+                                     :visualizar="{visivel: true, dataTarget: '#modalMarcaVisualizar', dataToggle: 'modal'}"
+                                     :editar=true
+                                     :excluir=true
                                      :titulos="{
                                                 id: {titulo: 'ID', tipo: 'text'},
                                                 nome: {titulo: 'Nome', tipo: 'text'},
@@ -53,15 +53,14 @@
             </div>
         </div>
 
+        <!-- inicio modal inserir marca -->
         <modal-component titulo="Adicionar marca" id="modalMarca">
-
             <template v-slot:alertas>
                 <alert-component tipo="danger" :message="transacaoMessage" v-if="transacaoStatus === 'error'"
                                  title="Erro ao cadastrar Marca"></alert-component>
                 <alert-component tipo="success" :message="transacaoMessage" v-if="transacaoStatus === 'success'"
                                  title="Marca cadastrada com sucesso"></alert-component>
             </template>
-
             <template v-slot:conteudo>
                 <div class="form-group">
                     <input-container-component titulo="" id="inputNovaMarca" id-help="inputNovaMarcaHelp"
@@ -77,14 +76,22 @@
                     </input-container-component>
                 </div>
             </template>
-
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
-
         </modal-component>
+        <!-- fim modal inserir marca -->
 
+        <!-- inicio modal visualizar marca -->
+        <modal-component titulo="Visualizar marca" id="modalMarcaVisualizar">
+            <template v-slot:alertas></template>
+            <template v-slot:conteudo>Teste</template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!-- fim modal visualizar marca -->
     </div>
 </template>
 
@@ -113,7 +120,7 @@ export default {
                     if (filtro != '') {
                         filtro += ";"
                     }
-                    filtro += chave + ':like:' + '%'+this.busca[chave]+'%'
+                    filtro += chave + ':like:' + '%' + this.busca[chave] + '%'
                 }
             }
             if (filtro != '') {

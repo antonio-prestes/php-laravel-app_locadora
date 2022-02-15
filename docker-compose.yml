@@ -78,7 +78,7 @@ services:
     depends_on:
       - php
     user: laravel
-    entrypoint: ['composer', '--ignore-platform-reqs']
+    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
     networks:
       - laravel
 
@@ -91,7 +91,7 @@ services:
       - 3000:3000
       - 3001:3001
     working_dir: /var/www/html
-    entrypoint: ['npm']
+    entrypoint: [ 'npm' ]
     networks:
       - laravel
 
@@ -108,7 +108,7 @@ services:
     depends_on:
       - mysql
     working_dir: /var/www/html
-    entrypoint: ['php', '/var/www/html/artisan']
+    entrypoint: [ 'php', '/var/www/html/artisan' ]
     networks:
       - laravel
 

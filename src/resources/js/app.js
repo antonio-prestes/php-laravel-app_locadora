@@ -6,9 +6,15 @@
 
 require('./bootstrap');
 import moment from 'moment';
+import Vuex from 'vuex';
 
 window.Vue = require('vue').default;
 
+const store =  new Vuex.Store({
+    state:{
+        teste: 'Teste de vuex'
+    }
+})
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -46,4 +52,5 @@ Vue.filter('formatDate', function (value) {
 
 const app = new Vue({
     el: '#app',
+    store
 });

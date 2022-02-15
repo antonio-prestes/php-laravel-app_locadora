@@ -28,3 +28,4 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && docker-php-ext-install redis
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
+
