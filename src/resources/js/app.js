@@ -10,9 +10,13 @@ import Vuex from 'vuex';
 
 window.Vue = require('vue').default;
 
-const store =  new Vuex.Store({
-    state:{
-        item: {}
+const store = new Vuex.Store({
+    state: {
+        item: {},
+        transacao: {
+            status: '',
+            mensagem: ''
+        }
     }
 })
 /**

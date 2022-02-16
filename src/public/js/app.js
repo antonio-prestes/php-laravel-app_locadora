@@ -5636,6 +5636,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Marcas",
   data: function data() {
@@ -5657,6 +5682,30 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    excluir: function excluir() {
+      var _this = this;
+
+      var confirmacao = confirm('Tem certeza que deseja remover este registro?');
+      if (!confirmacao) return false;
+      var url = this.urlBase + "/" + this.$store.state.item.id;
+      var formData = new FormData();
+      formData.append('_method', 'delete');
+      var config = {
+        headers: {
+          'Authorization': this.token,
+          'Accept': 'application/json'
+        }
+      };
+      axios.post(url, formData, config).then(function (response) {
+        _this.$store.state.transacao.status = 'success';
+        _this.$store.state.transacao.mensagem = 'Marca deletada com sucesso!';
+
+        _this.carregarLista();
+      })["catch"](function (errors) {
+        _this.$store.state.transacao.status = 'error';
+        _this.$store.state.transacao.mensagem = 'Erro ao deletar marca!';
+      });
+    },
     pesquisar: function pesquisar() {
       var filtro = '';
 
@@ -5686,11 +5735,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     carregarLista: function carregarLista() {
-      var _this = this;
+      var _this2 = this;
 
       var url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
       axios.get(url).then(function (response) {
-        _this.marcas = response.data;
+        _this2.marcas = response.data;
       })["catch"](function (errors) {
         console.log(errors);
       });
@@ -5699,7 +5748,7 @@ __webpack_require__.r(__webpack_exports__);
       this.logoMarca = e.target.files;
     },
     salvar: function salvar() {
-      var _this2 = this;
+      var _this3 = this;
 
       var formData = new FormData();
       formData.append('nome', this.nomeMarca);
@@ -5711,13 +5760,15 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.post(this.urlBase, formData, config).then(function (response) {
-        _this2.transacaoStatus = 'success';
-        _this2.transacaoMessage = {
+        _this3.transacaoStatus = 'success';
+        _this3.transacaoMessage = {
           message: 'ID da narca: ' + response.data.id
         };
+
+        _this3.carregarLista();
       })["catch"](function (errors) {
-        _this2.transacaoStatus = 'error';
-        _this2.transacaoMessage = {
+        _this3.transacaoStatus = 'error';
+        _this3.transacaoMessage = {
           message: errors.response.data.message,
           dados: errors.response.data.errors
         };
@@ -5838,6 +5889,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Table",
   props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
@@ -5887,7 +5940,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    item: {}
+    item: {},
+    transacao: {
+      status: '',
+      mensagem: ''
+    }
   }
 });
 /**
@@ -51118,7 +51175,11 @@ var render = function () {
                       dataToggle: "modal",
                     },
                     editar: true,
-                    excluir: true,
+                    excluir: {
+                      visivel: true,
+                      dataTarget: "#modalMarcaExcluir",
+                      dataToggle: "modal",
+                    },
                     titulos: {
                       id: { titulo: "ID", tipo: "text" },
                       nome: { titulo: "Nome", tipo: "text" },
@@ -51299,7 +51360,7 @@ var render = function () {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-primary",
+                    staticClass: "btn btn-success",
                     attrs: { type: "button" },
                     on: {
                       click: function ($event) {
@@ -51406,6 +51467,108 @@ var render = function () {
             proxy: true,
           },
         ]),
+      }),
+      _vm._v(" "),
+      _c("modal-component", {
+        attrs: { titulo: "Excluir marca", id: "modalMarcaExcluir" },
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "alertas",
+              fn: function () {
+                return [
+                  _vm.$store.state.transacao.status === "error"
+                    ? _c("alert-component", {
+                        attrs: {
+                          tipo: "success",
+                          message: _vm.$store.state.transacao.mensagem,
+                          title: "Erro ao excluir marca",
+                        },
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.$store.state.transacao.status === "success"
+                    ? _c("alert-component", {
+                        attrs: {
+                          tipo: "success",
+                          message: _vm.$store.state.transacao.mensagem,
+                          title: "Marca deletada com sucesso",
+                        },
+                      })
+                    : _vm._e(),
+                ]
+              },
+              proxy: true,
+            },
+            _vm.$store.state.transacao.status != "success"
+              ? {
+                  key: "conteudo",
+                  fn: function () {
+                    return [
+                      _c(
+                        "input-container-component",
+                        { attrs: { titulo: "ID" } },
+                        [
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "text", disabled: "" },
+                            domProps: { value: _vm.$store.state.item.id },
+                          }),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "input-container-component",
+                        { attrs: { titulo: "Nome da marca" } },
+                        [
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "text", disabled: "" },
+                            domProps: { value: _vm.$store.state.item.nome },
+                          }),
+                        ]
+                      ),
+                    ]
+                  },
+                  proxy: true,
+                }
+              : null,
+            {
+              key: "rodape",
+              fn: function () {
+                return [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button", "data-bs-dismiss": "modal" },
+                    },
+                    [_vm._v("Fechar")]
+                  ),
+                  _vm._v(" "),
+                  _vm.$store.state.transacao.status != "success"
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.excluir()
+                            },
+                          },
+                        },
+                        [_vm._v("Excluir")]
+                      )
+                    : _vm._e(),
+                ]
+              },
+              proxy: true,
+            },
+          ],
+          null,
+          true
+        ),
       }),
     ],
     1
@@ -51622,6 +51785,15 @@ var render = function () {
                           {
                             staticClass:
                               "btn btn-outline-danger btn-sm float-end",
+                            attrs: {
+                              "data-bs-toggle": _vm.excluir.dataToggle,
+                              "data-bs-target": _vm.excluir.dataTarget,
+                            },
+                            on: {
+                              click: function ($event) {
+                                return _vm.setStore(obj)
+                              },
+                            },
                           },
                           [_vm._v("Excluir")]
                         )

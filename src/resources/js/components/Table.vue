@@ -22,7 +22,9 @@
                             @click="setStore(obj)">Visualizar
                     </button>
                     <button v-if="editar" class="btn btn-outline-info btn-sm">Editar</button>
-                    <button v-if="excluir" class="btn btn-outline-danger btn-sm float-end">Excluir</button>
+                    <button v-if="excluir" class="btn btn-outline-danger btn-sm float-end"
+                            :data-bs-toggle="excluir.dataToggle" :data-bs-target="excluir.dataTarget"
+                            @click="setStore(obj)">Excluir</button>
                 </td>
             </tr>
             </tbody>

@@ -29,7 +29,7 @@
                     <table-component :dados="marcas.data"
                                      :visualizar="{visivel: true, dataTarget: '#modalMarcaVisualizar', dataToggle: 'modal'}"
                                      :editar=true
-                                     :excluir=true
+                                     :excluir="{visivel: true, dataTarget: '#modalMarcaExcluir', dataToggle: 'modal'}"
                                      :titulos="{
                                                 id: {titulo: 'ID', tipo: 'text'},
                                                 nome: {titulo: 'Nome', tipo: 'text'},
@@ -77,7 +77,7 @@
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
+                <button type="button" class="btn btn-success" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
         <!-- fim modal inserir marca -->
@@ -106,6 +106,31 @@
             </template>
         </modal-component>
         <!-- fim modal visualizar marca -->
+
+        <!-- inicio modal excluir marca -->
+        <modal-component titulo="Excluir marca" id="modalMarcaExcluir">
+            <template v-slot:alertas>
+                <alert-component tipo="success" :message="$store.state.transacao.mensagem" v-if="$store.state.transacao.status === 'error'"
+                                 title="Erro ao excluir marca"></alert-component>
+                <alert-component tipo="success" :message="$store.state.transacao.mensagem" v-if="$store.state.transacao.status === 'success'"
+                                 title="Marca deletada com sucesso"></alert-component>
+            </template>
+            <template v-slot:conteudo v-if="$store.state.transacao.status != 'success'">
+
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                </input-container-component>
+                <input-container-component titulo="Nome da marca">
+                    <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
+                </input-container-component>
+
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" @click="excluir()" v-if="$store.state.transacao.status != 'success'">Excluir</button>
+            </template>
+        </modal-component>
+        <!-- fim modal excluir marca -->
     </div>
 </template>
 
@@ -126,6 +151,33 @@ export default {
         }
     },
     methods: {
+        excluir(){
+            let confirmacao = confirm('Tem certeza que deseja remover este registro?')
+
+            if(!confirmacao) return false
+
+
+            let url = this.urlBase +"/" + this.$store.state.item.id
+            let formData = new FormData()
+            formData.append('_method', 'delete')
+            let config = {
+                headers: {
+                    'Authorization': this.token,
+                    'Accept': 'application/json'
+                }
+            }
+
+            axios.post(url, formData, config)
+                .then(response => {
+                    this.$store.state.transacao.status = 'success'
+                    this.$store.state.transacao.mensagem = 'Marca deletada com sucesso!'
+                    this.carregarLista()
+                })
+                .catch(errors => {
+                    this.$store.state.transacao.status = 'error'
+                    this.$store.state.transacao.mensagem = 'Erro ao deletar marca!'
+                })
+        },
         pesquisar() {
             let filtro = ''
 
@@ -186,6 +238,7 @@ export default {
                     this.transacaoMessage = {
                         message: 'ID da narca: ' + response.data.id
                     }
+                    this.carregarLista()
                 })
                 .catch(errors => {
                     this.transacaoStatus = 'error'
