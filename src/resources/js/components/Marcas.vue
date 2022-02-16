@@ -85,7 +85,22 @@
         <!-- inicio modal visualizar marca -->
         <modal-component titulo="Visualizar marca" id="modalMarcaVisualizar">
             <template v-slot:alertas></template>
-            <template v-slot:conteudo>Teste</template>
+            <template v-slot:conteudo>
+
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                </input-container-component>
+                <input-container-component titulo="Nome da marca">
+                    <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
+                </input-container-component>
+                <input-container-component titulo="Data criação">
+                    <span type="text" class="form-control" >{{ $store.state.item.created_at | formatDate }}</span>
+                </input-container-component>
+                <input-container-component titulo="Imagem">
+                    <img :src="'/app/public/'+$store.state.item.imagem" v-if="$store.state.item.imagem" alt="imagemlogo" width="200px">
+                </input-container-component>
+
+            </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </template>

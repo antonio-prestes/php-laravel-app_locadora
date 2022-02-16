@@ -12,7 +12,7 @@ window.Vue = require('vue').default;
 
 const store =  new Vuex.Store({
     state:{
-        teste: 'Teste de vuex'
+        item: {}
     }
 })
 /**

@@ -5621,6 +5621,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Marcas",
   data: function data() {
@@ -5820,13 +5835,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Table",
   props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
-  computed: {
+  methods: {
     setStore: function setStore(obj) {
-      console.log(obj);
-    },
+      this.$store.state.item = obj;
+    }
+  },
+  computed: {
     dadosFiltrados: function dadosFiltrados() {
       var campos = Object.keys(this.titulos);
       var dadosFiltrados = [];
@@ -5867,7 +5887,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    teste: 'Teste de vuex'
+    item: {}
   }
 });
 /**
@@ -51309,7 +51329,63 @@ var render = function () {
           {
             key: "conteudo",
             fn: function () {
-              return [_vm._v("Teste")]
+              return [
+                _c("input-container-component", { attrs: { titulo: "ID" } }, [
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: { type: "text", disabled: "" },
+                    domProps: { value: _vm.$store.state.item.id },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "input-container-component",
+                  { attrs: { titulo: "Nome da marca" } },
+                  [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "text", disabled: "" },
+                      domProps: { value: _vm.$store.state.item.nome },
+                    }),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "input-container-component",
+                  { attrs: { titulo: "Data criação" } },
+                  [
+                    _c(
+                      "span",
+                      { staticClass: "form-control", attrs: { type: "text" } },
+                      [
+                        _vm._v(
+                          _vm._s(
+                            _vm._f("formatDate")(
+                              _vm.$store.state.item.created_at
+                            )
+                          )
+                        ),
+                      ]
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "input-container-component",
+                  { attrs: { titulo: "Imagem" } },
+                  [
+                    _vm.$store.state.item.imagem
+                      ? _c("img", {
+                          attrs: {
+                            src: "/app/public/" + _vm.$store.state.item.imagem,
+                            alt: "imagemlogo",
+                            width: "200px",
+                          },
+                        })
+                      : _vm._e(),
+                  ]
+                ),
+              ]
             },
             proxy: true,
           },
@@ -51528,7 +51604,7 @@ var render = function () {
                               },
                             },
                           },
-                          [_vm._v("Visualizar")]
+                          [_vm._v("Visualizar\n                ")]
                         )
                       : _vm._e(),
                     _vm._v(" "),

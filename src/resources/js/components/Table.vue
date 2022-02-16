@@ -17,7 +17,10 @@
                     </span>
                 </td>
                 <td v-if="excluir || editar || visualizar">
-                    <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget" @click="setStore(obj)">Visualizar</button>
+                    <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm"
+                            :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget"
+                            @click="setStore(obj)">Visualizar
+                    </button>
                     <button v-if="editar" class="btn btn-outline-info btn-sm">Editar</button>
                     <button v-if="excluir" class="btn btn-outline-danger btn-sm float-end">Excluir</button>
                 </td>
@@ -31,10 +34,12 @@
 export default {
     name: "Table",
     props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
-    computed: {
+    methods:{
         setStore(obj){
-            console.log(obj)
-        },
+            this.$store.state.item = obj
+        }
+    },
+    computed: {
         dadosFiltrados() {
             let campos = Object.keys(this.titulos)
             let dadosFiltrados = []
