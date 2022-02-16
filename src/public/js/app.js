@@ -5698,12 +5698,13 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post(url, formData, config).then(function (response) {
         _this.$store.state.transacao.status = 'success';
-        _this.$store.state.transacao.mensagem = 'Marca deletada com sucesso!';
+        _this.$store.state.transacao.message = response.data.msg;
 
         _this.carregarLista();
       })["catch"](function (errors) {
+        console.log(errors);
         _this.$store.state.transacao.status = 'error';
-        _this.$store.state.transacao.mensagem = 'Erro ao deletar marca!';
+        _this.$store.state.transacao.message = errors.response.data.erro;
       });
     },
     pesquisar: function pesquisar() {
@@ -5896,6 +5897,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
   methods: {
     setStore: function setStore(obj) {
+      this.$store.state.transacao.status = '';
+      this.$store.state.transacao.message = '';
       this.$store.state.item = obj;
     }
   },
@@ -5943,7 +5946,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     item: {},
     transacao: {
       status: '',
-      mensagem: ''
+      message: ''
     }
   }
 });
@@ -51480,9 +51483,9 @@ var render = function () {
                   _vm.$store.state.transacao.status === "error"
                     ? _c("alert-component", {
                         attrs: {
-                          tipo: "success",
-                          message: _vm.$store.state.transacao.mensagem,
-                          title: "Erro ao excluir marca",
+                          tipo: "danger",
+                          message: _vm.$store.state.transacao,
+                          title: "Erro!",
                         },
                       })
                     : _vm._e(),
@@ -51491,8 +51494,8 @@ var render = function () {
                     ? _c("alert-component", {
                         attrs: {
                           tipo: "success",
-                          message: _vm.$store.state.transacao.mensagem,
-                          title: "Marca deletada com sucesso",
+                          message: _vm.$store.state.transacao,
+                          title: "Transação realizada!",
                         },
                       })
                     : _vm._e(),

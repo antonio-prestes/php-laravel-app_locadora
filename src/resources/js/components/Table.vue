@@ -38,6 +38,8 @@ export default {
     props: ['dados', 'titulos', 'visualizar', 'editar', 'excluir'],
     methods:{
         setStore(obj){
+            this.$store.state.transacao.status = ''
+            this.$store.state.transacao.message = ''
             this.$store.state.item = obj
         }
     },

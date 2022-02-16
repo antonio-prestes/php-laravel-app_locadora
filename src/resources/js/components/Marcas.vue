@@ -110,10 +110,10 @@
         <!-- inicio modal excluir marca -->
         <modal-component titulo="Excluir marca" id="modalMarcaExcluir">
             <template v-slot:alertas>
-                <alert-component tipo="success" :message="$store.state.transacao.mensagem" v-if="$store.state.transacao.status === 'error'"
-                                 title="Erro ao excluir marca"></alert-component>
-                <alert-component tipo="success" :message="$store.state.transacao.mensagem" v-if="$store.state.transacao.status === 'success'"
-                                 title="Marca deletada com sucesso"></alert-component>
+                <alert-component tipo="danger" :message="$store.state.transacao" v-if="$store.state.transacao.status === 'error'"
+                                 title="Erro!"></alert-component>
+                <alert-component tipo="success" :message="$store.state.transacao" v-if="$store.state.transacao.status === 'success'"
+                                 title="Transação realizada!"></alert-component>
             </template>
             <template v-slot:conteudo v-if="$store.state.transacao.status != 'success'">
 
@@ -170,12 +170,13 @@ export default {
             axios.post(url, formData, config)
                 .then(response => {
                     this.$store.state.transacao.status = 'success'
-                    this.$store.state.transacao.mensagem = 'Marca deletada com sucesso!'
+                    this.$store.state.transacao.message = response.data.msg
                     this.carregarLista()
                 })
                 .catch(errors => {
+                    console.log(errors)
                     this.$store.state.transacao.status = 'error'
-                    this.$store.state.transacao.mensagem = 'Erro ao deletar marca!'
+                    this.$store.state.transacao.message = errors.response.data.erro
                 })
         },
         pesquisar() {
