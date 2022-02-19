@@ -5738,9 +5738,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var config = {
         headers: {
-          'Authorization': this.token,
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
+          'Content-Type': 'multipart/form-data'
         },
         params: {
           '_method': 'patch'
@@ -5768,13 +5766,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = this.urlBase + "/" + this.$store.state.item.id;
       var formData = new FormData();
       formData.append('_method', 'delete');
-      var config = {
-        headers: {
-          'Authorization': this.token,
-          'Accept': 'application/json'
-        }
-      };
-      axios.post(url, formData, config).then(function (response) {
+      axios.post(url, formData).then(function (response) {
         _this2.$store.state.transacao.status = 'success';
         _this2.$store.state.transacao.message = response.data.msg;
 
@@ -5831,8 +5823,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('imagem', this.logoMarca[0]);
       var config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       };
       axios.post(this.urlBase, formData, config).then(function (response) {
@@ -6088,6 +6079,18 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.interceptors.request.use(function (config) {
+  config.headers.Accept = 'application/json';
+}, function (error) {
+  return error;
+});
+axios.interceptors.response.use(function (response) {
+  console.log(response);
+  return response;
+}, function (error) {
+  console.log(error);
+  return error;
+});
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
