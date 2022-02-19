@@ -205,9 +205,7 @@ export default {
             }
             let config = {
                 headers: {
-                    'Authorization': this.token,
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json'
                 },
                 params: {
                     '_method': 'patch'
@@ -234,18 +232,11 @@ export default {
 
             if (!confirmacao) return false
 
-
             let url = this.urlBase + "/" + this.$store.state.item.id
             let formData = new FormData()
             formData.append('_method', 'delete')
-            let config = {
-                headers: {
-                    'Authorization': this.token,
-                    'Accept': 'application/json'
-                }
-            }
 
-            axios.post(url, formData, config)
+            axios.post(url, formData)
                 .then(response => {
                     this.$store.state.transacao.status = 'success'
                     this.$store.state.transacao.message = response.data.msg
@@ -305,7 +296,6 @@ export default {
             let config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json'
                 }
             }
 
