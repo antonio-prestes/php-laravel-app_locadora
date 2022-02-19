@@ -5661,6 +5661,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Marcas",
   data: function data() {
@@ -5682,8 +5719,39 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    excluir: function excluir() {
+    atualizar: function atualizar() {
       var _this = this;
+
+      console.log(this.logoMarca[0]);
+      var url = this.urlBase + "/" + this.$store.state.item.id;
+      var formData = new FormData();
+      formData.append('_method', 'patch');
+      formData.append('nome', this.$store.state.item.nome);
+
+      if (this.logoMarca[0]) {
+        formData.append('imagem', this.logoMarca[0]);
+      }
+
+      var config = {
+        headers: {
+          'Authorization': this.token,
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json'
+        }
+      };
+      axios.post(url, formData, config).then(function (response) {
+        console.log('deu boa', response);
+        _this.$store.state.transacao.status = 'success';
+        inputAtualizarLogo.value = '';
+
+        _this.carregarLista();
+      })["catch"](function (errors) {
+        _this.$store.state.transacao.status = 'error';
+        console.log(errors);
+      });
+    },
+    excluir: function excluir() {
+      var _this2 = this;
 
       var confirmacao = confirm('Tem certeza que deseja remover este registro?');
       if (!confirmacao) return false;
@@ -5697,14 +5765,14 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.post(url, formData, config).then(function (response) {
-        _this.$store.state.transacao.status = 'success';
-        _this.$store.state.transacao.message = response.data.msg;
+        _this2.$store.state.transacao.status = 'success';
+        _this2.$store.state.transacao.message = response.data.msg;
 
-        _this.carregarLista();
+        _this2.carregarLista();
       })["catch"](function (errors) {
         console.log(errors);
-        _this.$store.state.transacao.status = 'error';
-        _this.$store.state.transacao.message = errors.response.data.erro;
+        _this2.$store.state.transacao.status = 'error';
+        _this2.$store.state.transacao.message = errors.response.data.erro;
       });
     },
     pesquisar: function pesquisar() {
@@ -5736,11 +5804,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     carregarLista: function carregarLista() {
-      var _this2 = this;
+      var _this3 = this;
 
       var url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
       axios.get(url).then(function (response) {
-        _this2.marcas = response.data;
+        _this3.marcas = response.data;
       })["catch"](function (errors) {
         console.log(errors);
       });
@@ -5749,7 +5817,7 @@ __webpack_require__.r(__webpack_exports__);
       this.logoMarca = e.target.files;
     },
     salvar: function salvar() {
-      var _this3 = this;
+      var _this4 = this;
 
       var formData = new FormData();
       formData.append('nome', this.nomeMarca);
@@ -5761,15 +5829,15 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.post(this.urlBase, formData, config).then(function (response) {
-        _this3.transacaoStatus = 'success';
-        _this3.transacaoMessage = {
+        _this4.transacaoStatus = 'success';
+        _this4.transacaoMessage = {
           message: 'ID da narca: ' + response.data.id
         };
 
-        _this3.carregarLista();
+        _this4.carregarLista();
       })["catch"](function (errors) {
-        _this3.transacaoStatus = 'error';
-        _this3.transacaoMessage = {
+        _this4.transacaoStatus = 'error';
+        _this4.transacaoMessage = {
           message: errors.response.data.message,
           dados: errors.response.data.errors
         };
@@ -5858,6 +5926,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -51177,7 +51248,11 @@ var render = function () {
                       dataTarget: "#modalMarcaVisualizar",
                       dataToggle: "modal",
                     },
-                    editar: true,
+                    editar: {
+                      visivel: true,
+                      dataTarget: "#modalMarcaEditar",
+                      dataToggle: "modal",
+                    },
                     excluir: {
                       visivel: true,
                       dataTarget: "#modalMarcaExcluir",
@@ -51473,6 +51548,154 @@ var render = function () {
       }),
       _vm._v(" "),
       _c("modal-component", {
+        attrs: { titulo: "Editar marca", id: "modalMarcaEditar" },
+        scopedSlots: _vm._u([
+          {
+            key: "alertas",
+            fn: function () {
+              return [
+                _vm.$store.state.transacao.status === "error"
+                  ? _c("alert-component", {
+                      attrs: {
+                        tipo: "danger",
+                        message: _vm.$store.state.transacao,
+                        title: "Erro!",
+                      },
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.$store.state.transacao.status === "success"
+                  ? _c("alert-component", {
+                      attrs: {
+                        tipo: "success",
+                        message: _vm.$store.state.transacao,
+                        title: "Marca Editada!",
+                      },
+                    })
+                  : _vm._e(),
+              ]
+            },
+            proxy: true,
+          },
+          {
+            key: "conteudo",
+            fn: function () {
+              return [
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c(
+                      "input-container-component",
+                      {
+                        attrs: {
+                          titulo: "",
+                          id: "inputAtualizarMarca",
+                          "id-help": "inputNovaMarcaHelp",
+                          "texto-ajuda": "Nome da marca",
+                        },
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.$store.state.item.nome,
+                              expression: "$store.state.item.nome",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            id: "inputAtualizarMarca",
+                            "aria-describedby": "inputNovaMarcaHelp",
+                            placeholder: "Nome",
+                          },
+                          domProps: { value: _vm.$store.state.item.nome },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.$store.state.item,
+                                "nome",
+                                $event.target.value
+                              )
+                            },
+                          },
+                        }),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "input-container-component",
+                      {
+                        attrs: {
+                          titulo: "",
+                          id: "inputAtualizarLogo",
+                          "id-help": "inputLogoHelp",
+                          "texto-ajuda": "Novo logo da marca",
+                        },
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "file",
+                            id: "inputAtualizarLogo",
+                            "aria-describedby": "inputLogoHelp",
+                          },
+                          on: {
+                            change: function ($event) {
+                              return _vm.carregarImagem($event)
+                            },
+                          },
+                        }),
+                      ]
+                    ),
+                  ],
+                  1
+                ),
+              ]
+            },
+            proxy: true,
+          },
+          {
+            key: "rodape",
+            fn: function () {
+              return [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-bs-dismiss": "modal" },
+                  },
+                  [_vm._v("Fechar")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.atualizar()
+                      },
+                    },
+                  },
+                  [_vm._v("Atualizar")]
+                ),
+              ]
+            },
+            proxy: true,
+          },
+        ]),
+      }),
+      _vm._v(" "),
+      _c("modal-component", {
         attrs: { titulo: "Excluir marca", id: "modalMarcaExcluir" },
         scopedSlots: _vm._u(
           [
@@ -51561,7 +51784,7 @@ var render = function () {
                             },
                           },
                         },
-                        [_vm._v("Excluir")]
+                        [_vm._v("Excluir\n            ")]
                       )
                     : _vm._e(),
                 ]
@@ -51714,7 +51937,7 @@ var render = function () {
               ])
             }),
             _vm._v(" "),
-            _vm.excluir || _vm.editar || _vm.visualizar.visivel
+            _vm.excluir.visivel || _vm.editar.visivel || _vm.visualizar.visivel
               ? _c("th")
               : _vm._e(),
           ],
@@ -51753,7 +51976,9 @@ var render = function () {
                 ])
               }),
               _vm._v(" "),
-              _vm.excluir || _vm.editar || _vm.visualizar
+              _vm.excluir.visivel ||
+              _vm.editar.visivel ||
+              _vm.visualizar.visivel
                 ? _c("td", [
                     _vm.visualizar.visivel
                       ? _c(
@@ -51774,11 +51999,22 @@ var render = function () {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.editar
+                    _vm.editar.visivel
                       ? _c(
                           "button",
-                          { staticClass: "btn btn-outline-info btn-sm" },
-                          [_vm._v("Editar")]
+                          {
+                            staticClass: "btn btn-outline-primary btn-sm",
+                            attrs: {
+                              "data-bs-toggle": _vm.editar.dataToggle,
+                              "data-bs-target": _vm.editar.dataTarget,
+                            },
+                            on: {
+                              click: function ($event) {
+                                return _vm.setStore(obj)
+                              },
+                            },
+                          },
+                          [_vm._v("Editar\n                ")]
                         )
                       : _vm._e(),
                     _vm._v(" "),

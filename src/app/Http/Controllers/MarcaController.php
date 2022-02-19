@@ -107,15 +107,18 @@ class MarcaController extends Controller
             $request->validate($marca->rules(), $marca->feedback());
         }
 
-        if ($request->file('imagem')) {
-            Storage::disk('public')->delete($marca->imagem);
-        }
-
-        $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens', 'public');
 
         $marca->fill($request->all());
-        $marca->imagem = $imagem_urn;
+
+
+        if ($request->file('imagem')){
+            Storage::disk('public')->delete($marca->imagem);
+
+            $imagem = $request->file('imagem');
+            $imagem_urn = $imagem->store('imagens', 'public');
+
+            $marca->imagem = $imagem_urn;
+        }
         $marca->save();
 
         return $marca;
