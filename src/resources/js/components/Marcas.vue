@@ -28,7 +28,7 @@
                 <card-component titulo="Marcas">
                     <table-component :dados="marcas.data"
                                      :visualizar="{visivel: true, dataTarget: '#modalMarcaVisualizar', dataToggle: 'modal'}"
-                                     :editar=true
+                                     :editar="{visivel: true, dataTarget: '#modalMarcaEditar', dataToggle: 'modal'}"
                                      :excluir="{visivel: true, dataTarget: '#modalMarcaExcluir', dataToggle: 'modal'}"
                                      :titulos="{
                                                 id: {titulo: 'ID', tipo: 'text'},
@@ -94,10 +94,11 @@
                     <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
                 </input-container-component>
                 <input-container-component titulo="Data criação">
-                    <span type="text" class="form-control" >{{ $store.state.item.created_at | formatDate }}</span>
+                    <span type="text" class="form-control">{{ $store.state.item.created_at | formatDate }}</span>
                 </input-container-component>
                 <input-container-component titulo="Imagem">
-                    <img :src="'/app/public/'+$store.state.item.imagem" v-if="$store.state.item.imagem" alt="imagemlogo" width="200px">
+                    <img :src="'/app/public/'+$store.state.item.imagem" v-if="$store.state.item.imagem" alt="imagemlogo"
+                         width="200px">
                 </input-container-component>
 
             </template>
@@ -107,12 +108,46 @@
         </modal-component>
         <!-- fim modal visualizar marca -->
 
+        <!-- inicio modal editar marca -->
+        <modal-component titulo="Editar marca" id="modalMarcaEditar">
+            <template v-slot:alertas>
+                <alert-component tipo="danger" :message="$store.state.transacao"
+                                 v-if="$store.state.transacao.status === 'error'"
+                                 title="Erro!"></alert-component>
+                <alert-component tipo="success" :message="$store.state.transacao"
+                                 v-if="$store.state.transacao.status === 'success'"
+                                 title="Marca Editada!"></alert-component>
+            </template>
+            <template v-slot:conteudo>
+                <div class="form-group">
+                    <input-container-component titulo="" id="inputAtualizarMarca" id-help="inputNovaMarcaHelp"
+                                               texto-ajuda="Nome da marca">
+                        <input type="text" class="form-control" id="inputAtualizarMarca"
+                               aria-describedby="inputNovaMarcaHelp"
+                               placeholder="Nome" v-model="$store.state.item.nome"/>
+                    </input-container-component>
+                    <input-container-component titulo="" id="inputAtualizarLogo" id-help="inputLogoHelp"
+                                               texto-ajuda="Novo logo da marca">
+                        <input type="file" class="form-control" id="inputAtualizarLogo" aria-describedby="inputLogoHelp"
+                               @change="carregarImagem($event)"/>
+                    </input-container-component>
+                </div>
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" @click="atualizar()">Atualizar</button>
+            </template>
+        </modal-component>
+        <!-- fim modal editar marca -->
+
         <!-- inicio modal excluir marca -->
         <modal-component titulo="Excluir marca" id="modalMarcaExcluir">
             <template v-slot:alertas>
-                <alert-component tipo="danger" :message="$store.state.transacao" v-if="$store.state.transacao.status === 'error'"
+                <alert-component tipo="danger" :message="$store.state.transacao"
+                                 v-if="$store.state.transacao.status === 'error'"
                                  title="Erro!"></alert-component>
-                <alert-component tipo="success" :message="$store.state.transacao" v-if="$store.state.transacao.status === 'success'"
+                <alert-component tipo="success" :message="$store.state.transacao"
+                                 v-if="$store.state.transacao.status === 'success'"
                                  title="Transação realizada!"></alert-component>
             </template>
             <template v-slot:conteudo v-if="$store.state.transacao.status != 'success'">
@@ -127,7 +162,9 @@
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-danger" @click="excluir()" v-if="$store.state.transacao.status != 'success'">Excluir</button>
+                <button type="button" class="btn btn-danger" @click="excluir()"
+                        v-if="$store.state.transacao.status != 'success'">Excluir
+                </button>
             </template>
         </modal-component>
         <!-- fim modal excluir marca -->
@@ -151,13 +188,45 @@ export default {
         }
     },
     methods: {
-        excluir(){
+        atualizar() {
+            console.log(this.logoMarca[0])
+
+            let url = this.urlBase + "/" + this.$store.state.item.id
+
+            let formData = new FormData()
+            formData.append('_method', 'patch')
+            formData.append('nome', this.$store.state.item.nome)
+            if (this.logoMarca[0]) {
+                formData.append('imagem', this.logoMarca[0])
+            }
+            let config = {
+                headers: {
+                    'Authorization': this.token,
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json'
+                }
+            }
+
+            axios.post(url, formData, config)
+                .then(response => {
+                    console.log('deu boa', response)
+                    this.$store.state.transacao.status = 'success'
+                    inputAtualizarLogo.value = ''
+
+                    this.carregarLista()
+                })
+                .catch(errors => {
+                    this.$store.state.transacao.status = 'error'
+                    console.log(errors)
+                })
+        },
+        excluir() {
             let confirmacao = confirm('Tem certeza que deseja remover este registro?')
 
-            if(!confirmacao) return false
+            if (!confirmacao) return false
 
 
-            let url = this.urlBase +"/" + this.$store.state.item.id
+            let url = this.urlBase + "/" + this.$store.state.item.id
             let formData = new FormData()
             formData.append('_method', 'delete')
             let config = {

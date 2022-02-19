@@ -4,7 +4,7 @@
             <thead>
             <tr>
                 <th scope="col" v-for="titulo, key in titulos" :key="key">{{ titulo.titulo }}</th>
-                <th v-if="excluir || editar || visualizar.visivel"></th>
+                <th v-if="excluir.visivel || editar.visivel || visualizar.visivel"></th>
             </tr>
             </thead>
             <tbody>
@@ -16,12 +16,15 @@
                         <img :src="'/app/public/'+valor" alt="imagemlogo" width="30px">
                     </span>
                 </td>
-                <td v-if="excluir || editar || visualizar">
+                <td v-if="excluir.visivel || editar.visivel || visualizar.visivel">
                     <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm"
                             :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget"
                             @click="setStore(obj)">Visualizar
                     </button>
-                    <button v-if="editar" class="btn btn-outline-info btn-sm">Editar</button>
+                    <button v-if="editar.visivel" class="btn btn-outline-primary btn-sm"
+                            :data-bs-toggle="editar.dataToggle" :data-bs-target="editar.dataTarget"
+                            @click="setStore(obj)">Editar
+                    </button>
                     <button v-if="excluir" class="btn btn-outline-danger btn-sm float-end"
                             :data-bs-toggle="excluir.dataToggle" :data-bs-target="excluir.dataTarget"
                             @click="setStore(obj)">Excluir</button>
