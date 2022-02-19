@@ -43,6 +43,7 @@ export default {
         setStore(obj){
             this.$store.state.transacao.status = ''
             this.$store.state.transacao.message = ''
+            this.$store.state.transacao.dados = ''
             this.$store.state.item = obj
         }
     },
