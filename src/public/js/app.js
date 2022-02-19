@@ -5698,6 +5698,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Marcas",
   data: function data() {
@@ -5722,10 +5727,9 @@ __webpack_require__.r(__webpack_exports__);
     atualizar: function atualizar() {
       var _this = this;
 
-      console.log(this.logoMarca[0]);
       var url = this.urlBase + "/" + this.$store.state.item.id;
-      var formData = new FormData();
-      formData.append('_method', 'patch');
+      var formData = new FormData(); //   formData.append('_method', 'patch')
+
       formData.append('nome', this.$store.state.item.nome);
 
       if (this.logoMarca[0]) {
@@ -5737,17 +5741,23 @@ __webpack_require__.r(__webpack_exports__);
           'Authorization': this.token,
           'Content-Type': 'multipart/form-data',
           'Accept': 'application/json'
+        },
+        params: {
+          '_method': 'patch'
         }
       };
       axios.post(url, formData, config).then(function (response) {
-        console.log('deu boa', response);
         _this.$store.state.transacao.status = 'success';
+        _this.$store.state.transacao.message = 'Marca atualizada com sucesso.';
+        _this.$store.state.item.imagem = response.data.imagem;
         inputAtualizarLogo.value = '';
 
         _this.carregarLista();
       })["catch"](function (errors) {
+        _this.$store.state.transacao.data = '';
         _this.$store.state.transacao.status = 'error';
-        console.log(errors);
+        _this.$store.state.transacao.message = errors.response.data.message;
+        _this.$store.state.transacao.dados = errors.response.data.errors;
       });
     },
     excluir: function excluir() {
@@ -5770,7 +5780,6 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.carregarLista();
       })["catch"](function (errors) {
-        console.log(errors);
         _this2.$store.state.transacao.status = 'error';
         _this2.$store.state.transacao.message = errors.response.data.erro;
       });
@@ -5809,9 +5818,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
       axios.get(url).then(function (response) {
         _this3.marcas = response.data;
-      })["catch"](function (errors) {
-        console.log(errors);
-      });
+      })["catch"](function (errors) {});
     },
     carregarImagem: function carregarImagem(e) {
       this.logoMarca = e.target.files;
@@ -5970,6 +5977,7 @@ __webpack_require__.r(__webpack_exports__);
     setStore: function setStore(obj) {
       this.$store.state.transacao.status = '';
       this.$store.state.transacao.message = '';
+      this.$store.state.transacao.dados = '';
       this.$store.state.item = obj;
     }
   },
@@ -6017,7 +6025,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     item: {},
     transacao: {
       status: '',
-      message: ''
+      message: '',
+      dados: ''
     }
   }
 });
@@ -51569,7 +51578,7 @@ var render = function () {
                       attrs: {
                         tipo: "success",
                         message: _vm.$store.state.transacao,
-                        title: "Marca Editada!",
+                        title: "Transação realizada!",
                       },
                     })
                   : _vm._e(),
@@ -51626,6 +51635,23 @@ var render = function () {
                             },
                           },
                         }),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "input-container-component",
+                      { attrs: { titulo: "Imagem" } },
+                      [
+                        _vm.$store.state.item.imagem
+                          ? _c("img", {
+                              attrs: {
+                                src:
+                                  "/app/public/" + _vm.$store.state.item.imagem,
+                                alt: "imagemlogo",
+                                width: "200px",
+                              },
+                            })
+                          : _vm._e(),
                       ]
                     ),
                     _vm._v(" "),

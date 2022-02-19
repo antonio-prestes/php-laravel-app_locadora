@@ -116,7 +116,7 @@
                                  title="Erro!"></alert-component>
                 <alert-component tipo="success" :message="$store.state.transacao"
                                  v-if="$store.state.transacao.status === 'success'"
-                                 title="Marca Editada!"></alert-component>
+                                 title="Transação realizada!"></alert-component>
             </template>
             <template v-slot:conteudo>
                 <div class="form-group">
@@ -125,6 +125,11 @@
                         <input type="text" class="form-control" id="inputAtualizarMarca"
                                aria-describedby="inputNovaMarcaHelp"
                                placeholder="Nome" v-model="$store.state.item.nome"/>
+                    </input-container-component>
+                    <input-container-component titulo="Imagem">
+                        <img :src="'/app/public/'+$store.state.item.imagem" v-if="$store.state.item.imagem"
+                             alt="imagemlogo"
+                             width="200px">
                     </input-container-component>
                     <input-container-component titulo="" id="inputAtualizarLogo" id-help="inputLogoHelp"
                                                texto-ajuda="Novo logo da marca">
@@ -189,12 +194,11 @@ export default {
     },
     methods: {
         atualizar() {
-            console.log(this.logoMarca[0])
 
             let url = this.urlBase + "/" + this.$store.state.item.id
 
             let formData = new FormData()
-            formData.append('_method', 'patch')
+            //   formData.append('_method', 'patch')
             formData.append('nome', this.$store.state.item.nome)
             if (this.logoMarca[0]) {
                 formData.append('imagem', this.logoMarca[0])
@@ -204,20 +208,25 @@ export default {
                     'Authorization': this.token,
                     'Content-Type': 'multipart/form-data',
                     'Accept': 'application/json'
+                },
+                params: {
+                    '_method': 'patch'
                 }
             }
 
             axios.post(url, formData, config)
                 .then(response => {
-                    console.log('deu boa', response)
                     this.$store.state.transacao.status = 'success'
+                    this.$store.state.transacao.message = 'Marca atualizada com sucesso.'
+                    this.$store.state.item.imagem = response.data.imagem
                     inputAtualizarLogo.value = ''
-
                     this.carregarLista()
                 })
                 .catch(errors => {
+                    this.$store.state.transacao.data = ''
                     this.$store.state.transacao.status = 'error'
-                    console.log(errors)
+                    this.$store.state.transacao.message = errors.response.data.message
+                    this.$store.state.transacao.dados = errors.response.data.errors
                 })
         },
         excluir() {
@@ -243,7 +252,6 @@ export default {
                     this.carregarLista()
                 })
                 .catch(errors => {
-                    console.log(errors)
                     this.$store.state.transacao.status = 'error'
                     this.$store.state.transacao.message = errors.response.data.erro
                 })
@@ -282,7 +290,6 @@ export default {
                     this.marcas = response.data
                 })
                 .catch(errors => {
-                    console.log(errors)
                 })
         },
 
